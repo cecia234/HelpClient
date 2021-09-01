@@ -16,6 +16,11 @@ public class RequestListAdapter extends RecyclerView.Adapter<RequestListAdapter.
 
     private ArrayList<HelpRequest> localDataSet;
 
+    public void setLocalDataSet(ArrayList<HelpRequest> dataset){
+        localDataSet = dataset;
+
+    }
+
     /**
      * Provide a reference to the type of views that you are using
      * (custom ViewHolder).
@@ -61,6 +66,9 @@ public class RequestListAdapter extends RecyclerView.Adapter<RequestListAdapter.
      */
     public RequestListAdapter(ArrayList<HelpRequest> dataSet) {
         localDataSet = dataSet;
+    }
+
+    public RequestListAdapter() {
     }
 
     // Create new views (invoked by the layout manager)

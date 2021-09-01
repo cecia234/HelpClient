@@ -1,36 +1,20 @@
 package it.units.ceschia.helpclient.fragment;
 
 import android.os.Bundle;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.view.ViewGroup;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.appcompat.widget.Toolbar;
 import androidx.fragment.app.Fragment;
-import androidx.lifecycle.MutableLiveData;
-import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-import android.util.Log;
-import android.view.LayoutInflater;
-import android.view.View;
-import android.view.ViewGroup;
-import android.widget.TextView;
-
-import com.google.android.gms.tasks.OnCompleteListener;
-import com.google.android.gms.tasks.Task;
-import com.google.firebase.auth.FirebaseUser;
-import com.google.firebase.firestore.CollectionReference;
-import com.google.firebase.firestore.FirebaseFirestore;
-import com.google.firebase.firestore.QueryDocumentSnapshot;
-import com.google.firebase.firestore.QuerySnapshot;
-
-import java.util.ArrayList;
-
 import it.units.ceschia.helpclient.R;
-import it.units.ceschia.helpclient.entity.HelpRequest;
-import it.units.ceschia.helpclient.entity.HelpRequestSet;
 import it.units.ceschia.helpclient.recycler_view.adapter.RequestListAdapter;
 import it.units.ceschia.helpclient.viewmodel.ClientViewModel;
 
@@ -51,7 +35,6 @@ public class HelpRequestListFragment extends Fragment {
     protected RecyclerView mRecyclerView;
     protected RequestListAdapter mAdapter;
     protected RecyclerView.LayoutManager mLayoutManager;
-    protected ArrayList<HelpRequest> mDataset;
 
     public HelpRequestListFragment() {
         // Required empty public constructor
@@ -61,31 +44,25 @@ public class HelpRequestListFragment extends Fragment {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         clientViewModel = new ViewModelProvider(requireActivity()).get(ClientViewModel.class);
-        // Initialize dataset, this data would usually come from a local content provider or
-        // remote server.
-        getData();
-        //initDataset();
+        if(mAdapter==null){
+            mAdapter = new RequestListAdapter();
+        }
     }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-
-
-
-
         return inflater.inflate(R.layout.fragment_help_request_list, container, false);
     }
 
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-        // BEGIN_INCLUDE(initializeRecyclerView)
-        mRecyclerView = (RecyclerView) getActivity().findViewById(R.id.recycler_view_requests_list);
+        Toolbar myToolbar = requireActivity().findViewById(R.id.toolbar_help_requests_list);
+        myToolbar.setTitle(R.string.app_name);
+        myToolbar.inflateMenu(R.menu.menu);
 
-        // LinearLayoutManager is used here, this will layout the elements in a similar fashion
-        // to the way ListView would layout elements. The RecyclerView.LayoutManager defines how
-        // elements are laid out.
+        mRecyclerView = requireActivity().findViewById(R.id.recycler_view_requests_list);
         mLayoutManager = new LinearLayoutManager(getActivity());
 
         mCurrentLayoutManagerType = LayoutManagerType.LINEAR_LAYOUT_MANAGER;
@@ -96,11 +73,7 @@ public class HelpRequestListFragment extends Fragment {
                     .getSerializable(KEY_LAYOUT_MANAGER);
         }
         setRecyclerViewLayoutManager(mCurrentLayoutManagerType);
-
-        mAdapter = new RequestListAdapter(mDataset);
-        // Set CustomAdapter as the adapter for RecyclerView.
-        mRecyclerView.setAdapter(mAdapter);
-        // END_INCLUDE(initializeRecyclerView)
+        clientViewModel.fetchRequestsContinue(mAdapter,mRecyclerView);
     }
 
     /**
@@ -136,22 +109,4 @@ public class HelpRequestListFragment extends Fragment {
         super.onSaveInstanceState(savedInstanceState);
     }
 
-    /**
-     * Generates Strings for RecyclerView's adapter. This data would usually come
-     * from a local content provider or remote server.
-     */
-   /* private void initDataset() {
-        for (int i = 0; i < DATASET_COUNT; i++) {
-            mDataset[i] = "This is element #" + i;
-        }
-    }*/
-
-    public void getData() {
-        clientViewModel.getHelpRequestSetMutableLiveData().observe(getActivity(), new Observer<HelpRequestSet>() {
-            @Override
-            public void onChanged(HelpRequestSet helpRequestSet) {
-                mDataset = helpRequestSet.getHelpRequests();
-            }
-        });
-    }
 }
