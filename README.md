@@ -19,7 +19,7 @@
   <li>Sorting per richieste prese in carico, per data, per posizione</li>    
   <li>Possibilità di visualizzazione dati utente</li>
   <li>Possibilità di notificare la presa in carico della richiesta all'interessato</li> 
-  <li>Possibilità di ricevere solamente le richieste "vicine" geograficamente in base alla posizione in tempo reale del client, per unità mobili, o in base a posizione fissata, per centrali, unità di pronto soccorso ecc.</li>
+  <li>Possibilità di ricevere solamente le richieste "vicine" geograficamente in base alla posizione in tempo reale del client (per unità mobili) o in base a posizione fissata (per centrali, unità di pronto soccorso ecc.)</li>
 </ul>
 
 
