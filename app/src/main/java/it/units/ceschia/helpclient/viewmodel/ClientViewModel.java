@@ -158,7 +158,7 @@ public class ClientViewModel extends ViewModel {
                     Log.w(TAG, "Listen failed.", e);
                     return;
                 }
-
+                helpRequests.clear();
                 for (QueryDocumentSnapshot document : value) {
                     HelpRequest helpRequest = document.toObject(HelpRequest.class);
                     helpRequests.add(helpRequest);
@@ -172,9 +172,9 @@ public class ClientViewModel extends ViewModel {
                     }
                 });
 
-
+                mAdapter.setLocalDataSet(null);
                 mAdapter.setLocalDataSet(helpRequests);
-                mAdapter.notifyDataSetChanged();
+
 
                 mRecyclerView.setAdapter(mAdapter);
 
